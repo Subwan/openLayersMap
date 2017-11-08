@@ -1,24 +1,24 @@
-var map = new ol.Map({
-  target: 'map',
-    controls: ol.control.defaults({
-    attributionOptions: {
-      collapsible: false
+(function(){
+  function getId() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/map?method=id', false);
+    xhr.send();
+    if (xhr.status != 200) {
+      alert( xhr.status + ': ' + xhr.statusText );
+    } else {
+      return xhr.responseText;
     }
-  }),
-    view: new ol.View({
-      center: [0, 0],
-      zoom: 0
-    }),
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.TileWMS({
-        projection: 'EPSG:4326', //HERE IS THE DATA SOURCE PROJECTION
-        url: 'http://demo.boundlessgeo.com/geoserver/wms',
-        params: {
-          'LAYERS': 'ne:NE1_HR_LC_SR_W_DR'
-        }
-      })
-      })
-    ]
+  };
 
-  });
+  function sendMarker(body) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/map', true);
+    xhr.send(body);
+    if (xhr.status != 200) {
+      alert( xhr.status + ': ' + xhr.statusText );
+    } else {
+      return xhr.responseText;
+    }
+  };
+
+})();
