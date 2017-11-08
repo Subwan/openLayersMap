@@ -1,6 +1,7 @@
 package com.openLayersMap.www.BDConnect;
 
 
+import com.openLayersMap.www.Model.Marker;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -40,16 +41,16 @@ public class AbstractMapper {
 
     }
 
-    public long findId(String type) {
-        long id;
+    public long insertMarker(Marker marker) {
+        long id = 0;
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
             MapMapper mapper = session.getMapper(MapMapper.class);
-            id = mapper.findId(type);
+            id = mapper.insertMarker(marker.getType(), marker.getCoordinates());
             session.close();
         } catch (SQLException e) {
-            id = 1;
+            e.printStackTrace();
         }
         return id;
     }

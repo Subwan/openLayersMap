@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Select;
 public interface MapMapper {
 
 
-    @Select("SELECT MAX(ID) FROM #{table};")
-    long findId(@Param("table") String type);
+    @Select("INSERT INTO #{table} (coordinates) values(#{coordinates}; SELECT LAST_INSERT_ID();")
+    long insertMarker(@Param("table") String type, @Param("coordinates") String coordinates);
 }

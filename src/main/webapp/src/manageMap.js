@@ -9,7 +9,7 @@ function getId(type) {
   }
 };
 
-function sendMarker(body) {
+function insertMarker(body) {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/map', true);
   xhr.send(body);
