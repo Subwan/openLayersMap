@@ -42,7 +42,9 @@
       <button id="insert">Insert</button>
     </div>
     <script>
-      var id = 0;
+      var idPoint = 0;
+      var idLineString = 0;
+      var idPolygon = 0;
 
       var mapOSM = new ol.layer.Tile({
         source: new ol.source.OSM()
@@ -89,6 +91,8 @@
           zoom: 4
         })
       });
+      mapOSM.setVisible(true);
+      mapGoogle.setVisible(false);
 
       var Modify = {
         init: function() {
@@ -110,7 +114,7 @@
           });
 
           this.modify.on('modifyend',function(e){
-            console.log(e.feature.getGeometry().getCoordinates());
+            console.log(selectedFeatures.getCoordinates());
           });
         },
         setActive: function(active) {
@@ -137,8 +141,8 @@
         setEvents: function() {
           this.Point.on('drawend', function(e){
             e.feature.type = 'Point';
-            id +=1;
-            e.feature.id = id;
+            idPoint += 1;
+            e.feature.id = idPoint;
             console.log(e.feature.getGeometry().getCoordinates());
             alert(e.feature.id + ' ' + e.feature.type);
             let body = {
@@ -146,7 +150,7 @@
               type : e.feature.type,
               coord : e.feature.getGeometry().getCoordinates()
             };
-            sendMarker(body);
+            // sendMarker(body);
           });
 
           this.LineString.on('drawend', function(e){
@@ -159,7 +163,7 @@
               type : e.feature.type,
               coord : e.feature.getGeometry().getCoordinates()
             };
-            sendMarker(body);
+            // sendMarker(body);
           });
 
           this.Polygon.on('drawend', function(e){
@@ -172,7 +176,7 @@
               type : e.feature.type,
               coord : e.feature.getGeometry().getCoordinates()
             };
-            sendMarker(body);
+            // sendMarker(body);
           });
         },
         Point: new ol.interaction.Draw({
