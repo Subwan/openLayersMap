@@ -114,9 +114,13 @@
           });
 
           this.modify.on('modifyend',function(e){
-            var features = e.features.getArray();
+            let features = e.features.getArray();
                console.log(features[0].getGeometry().getCoordinates());
                alert(features[0].id + ' ' + features[0].type);
+            let body = 'method=modify&id=' + features[0].id +
+                 '&type=' + features[0].type + '&coord='
+                  + features[0].getGeometry().getCoordinates();
+            manageMarker(body); 
           });
         },
         setActive: function(active) {
@@ -147,7 +151,7 @@
             let body = 'method=insert&type=' +
                e.feature.type + '&coord='
                + e.feature.getGeometry().getCoordinates();
-            // e.feature.id = insertMarker(body);
+            // e.feature.id = manageMarker(body);
           });
 
           this.LineString.on('drawend', function(e){
@@ -156,7 +160,7 @@
             let body = 'method=insert&type=' +
                e.feature.type + '&coord='
                + e.feature.getGeometry().getCoordinates();
-            // e.feature.id = inertMarker(body);
+            // e.feature.id = manageMarker(body);
           });
 
           this.Polygon.on('drawend', function(e){
@@ -165,7 +169,7 @@
             let body = 'method=insert&type=' +
                e.feature.type + '&coord='
                + e.feature.getGeometry().getCoordinates();
-            // e.feature.id = insertMarker(body);
+            // e.feature.id = manageMarker(body);
           });
         },
 

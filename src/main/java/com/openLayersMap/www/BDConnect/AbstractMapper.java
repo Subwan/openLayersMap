@@ -54,4 +54,16 @@ public class AbstractMapper {
         }
         return id;
     }
+
+    public void updateMarker(Marker marker) {
+        try {
+            SqlSessionFactory sqlSessionFactory = dataSource();
+            SqlSession session = sqlSessionFactory.openSession();
+            MapMapper mapper = session.getMapper(MapMapper.class);
+            mapper.updateMarker(marker.getId(), marker.getType(), marker.getCoordinates());
+            session.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

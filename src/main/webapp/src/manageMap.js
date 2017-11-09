@@ -1,6 +1,6 @@
-function getId(type) {
+function getAllMarker() {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/map?type=' + type, false);
+  xhr.open('GET', '/map', false);
   xhr.send();
   if (xhr.status != 200) {
     alert( xhr.status + ': ' + xhr.statusText );
@@ -9,7 +9,7 @@ function getId(type) {
   }
 };
 
-function insertMarker(body) {
+function manageMarker(body) {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/map', true);
   xhr.send(body);
