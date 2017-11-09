@@ -17,6 +17,12 @@ public class Marker {
         setCoordinates(coordinates);
     }
 
+    public Marker(Long id, String type, String coordinates) {
+        setId(id);
+        setType(type);
+        setCoordinates(coordinates);
+    }
+
     public void setId(long id) { this.id = id; };
 
     public long getId() {return  id; };

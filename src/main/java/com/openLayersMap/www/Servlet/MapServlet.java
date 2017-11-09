@@ -1,6 +1,7 @@
 package com.openLayersMap.www.Servlet;
 
 
+import com.google.gson.Gson;
 import com.openLayersMap.www.BDConnect.AbstractMapper;
 import com.openLayersMap.www.Model.Marker;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class MapServlet extends HttpServlet {
@@ -17,6 +19,12 @@ public class MapServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)  {
         response.setContentType("text/html;charset=utf-8");
+        String json = gerAllMarkers();
+        try {
+            response.getWriter().write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -43,5 +51,10 @@ public class MapServlet extends HttpServlet {
     private void updateMarker(long id, String type, String coordinates) {
         Marker marker = new Marker(id, type, coordinates);
         mapMapper.updateMarker(marker);
+    }
+
+    private String gerAllMarkers() {
+        List<Marker> markers = mapMapper.getAllMarkers();
+        return new Gson().toJson(markers);
     }
 }

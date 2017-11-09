@@ -120,7 +120,7 @@
             let body = 'method=modify&id=' + features[0].id +
                  '&type=' + features[0].type + '&coord='
                   + features[0].getGeometry().getCoordinates();
-            manageMarker(body); 
+            manageMarker(body);
           });
         },
         setActive: function(active) {
@@ -151,7 +151,7 @@
             let body = 'method=insert&type=' +
                e.feature.type + '&coord='
                + e.feature.getGeometry().getCoordinates();
-            // e.feature.id = manageMarker(body);
+            e.feature.id = manageMarker(body);
           });
 
           this.LineString.on('drawend', function(e){
@@ -160,7 +160,7 @@
             let body = 'method=insert&type=' +
                e.feature.type + '&coord='
                + e.feature.getGeometry().getCoordinates();
-            // e.feature.id = manageMarker(body);
+            e.feature.id = manageMarker(body);
           });
 
           this.Polygon.on('drawend', function(e){
@@ -169,7 +169,7 @@
             let body = 'method=insert&type=' +
                e.feature.type + '&coord='
                + e.feature.getGeometry().getCoordinates();
-            // e.feature.id = manageMarker(body);
+            e.feature.id = manageMarker(body);
           });
         },
 
@@ -242,6 +242,18 @@
 
 
       let loadButton = document.getElementById('load');
+      loadButton.onclick = function() {
+        let allMarkers = getAllMarkers();
+        allMarkers.forEach(function(item, i, arr) {
+          alert(item);
+
+
+          // vector.addFeature(new ol.Feature(new ol.geom.Point([, ], )));
+        });
+      }
+
+
+
 
 
     </script>

@@ -12,6 +12,8 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbstractMapper {
 
@@ -65,5 +67,19 @@ public class AbstractMapper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Marker> getAllMarkers() {
+        List<Marker> markers = new ArrayList<>();
+        try {
+            SqlSessionFactory sqlSessionFactory = dataSource();
+            SqlSession session = sqlSessionFactory.openSession();
+            MapMapper mapper = session.getMapper(MapMapper.class);
+            markers = mapper.getAllMarkers();
+            session.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return markers;
     }
 }
