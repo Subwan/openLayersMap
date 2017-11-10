@@ -68,8 +68,15 @@ public class AbstractMapper {
             SqlSession session = sqlSessionFactory.openSession();
             FigureMapper mapper = session.getMapper(FigureMapper.class);
             List<Dot> dotOld = mapper.selectById(figure.getId());
-            for (double[] dot : figure.getCoordinates()) {
-                mapper.updateMarker(dot[0], dot[1], figure.getId());
+            int size = dotOld.size();
+            int i = 0;
+            for (double[] coord : figure.getCoordinates()) {
+                if (i < size) {
+                    mapper.updateCoordinates(coord[0], coord[1], figure.getId());
+                } else {
+                    mapper.insertCoordinates(coord[0], coord[1], figure.getId());
+                }
+                i++;
             }
             session.close();
         } catch (SQLException e) {
@@ -107,6 +114,6 @@ public class AbstractMapper {
         return id;
     }
 
-    public void updatePoint(Point dot) {
+    public void updatePoint(Point point) {
     }
 }

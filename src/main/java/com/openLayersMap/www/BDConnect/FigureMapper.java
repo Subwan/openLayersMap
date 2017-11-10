@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface FigureMapper {
 
-
     @Select("INSERT INTO map.Figure (type) values(#{type});")
     void insertMarker(@Param("type") String type);
+
 
     @Select("SELECT LAST_INSERT_ID();")
     Long getId();
@@ -21,15 +21,15 @@ public interface FigureMapper {
     void insertCoordinates(@Param("lat") double lat, @Param("lon") double lon, @Param("fk") long id);
 
 
-    @Select("SELECT C.lat, C.lon FROM map.Coordinates C WHERE c.fk_figure=#{fk};")
+    @Select("SELECT lat, lon FROM map.Coordinates  WHERE fk_figure=#{fk};")
         @Results(value = {
                 @Result(property = "lat", column = "lat"),
                 @Result(property = "lon", column = "lon")
         })
     List<Dot> selectById(@Param("fk") long id);
 
-    @Select("UPDATE map.Figure set x=#{x}, y=#{y} where id=#{id}; ")
-    void updateMarker(@Param("x") double x, @Param("y") double y, @Param("id") long id);
+    @Select("UPDATE map.Coordinates set lat=#{lat}, lon=#{lon} where fk_figure=#{id}; ")
+    void updateCoordinates(@Param("lat") double x, @Param("lon") double y, @Param("id") long id);
 
     @ConstructorArgs({
             @Arg(column = "id", javaType = Long.class)
