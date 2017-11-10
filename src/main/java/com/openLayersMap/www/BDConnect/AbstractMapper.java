@@ -1,7 +1,8 @@
 package com.openLayersMap.www.BDConnect;
 
 
-import com.openLayersMap.www.Model.Marker;
+import com.openLayersMap.www.Model.Dot;
+import com.openLayersMap.www.Model.Figure;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -22,7 +23,7 @@ public class AbstractMapper {
         try {
             dataSource.setDriverClassName("com.mysql.jdbc.Driver");
             dataSource.setUsername("root");
-            dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/marker?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+            dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/map?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,24 +33,27 @@ public class AbstractMapper {
     private SqlSessionFactory dataSource() throws SQLException {
         BasicDataSource dataSource = connect();
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
-
         Environment environment = new Environment("development",
                 transactionFactory, dataSource);
         Configuration configuration = new Configuration(environment);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
-        sqlSessionFactory.getConfiguration().addMapper(MapMapper.class);
+        sqlSessionFactory.getConfiguration().addMapper(FigureMapper.class);
 
         return sqlSessionFactory;
 
     }
 
-    public long insertMarker(Marker marker) {
+    public long insertPoint(Figure figure) {
         long id = 0;
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
-            MapMapper mapper = session.getMapper(MapMapper.class);
-            id = mapper.insertMarker(marker.getType(), marker.getCoordinates());
+            FigureMapper mapper = session.getMapper(FigureMapper.class);
+            mapper.insertMarker(figure.getType());
+            id = mapper.getId();
+            for (float[] dot : figure.getCoordinates()) {
+                mapper.insertCoordinates(dot[0], dot[1], id);
+            }
             session.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,24 +61,27 @@ public class AbstractMapper {
         return id;
     }
 
-    public void updateMarker(Marker marker) {
+    public void updateFigure(Figure figure) {
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
-            MapMapper mapper = session.getMapper(MapMapper.class);
-            mapper.updateMarker(marker.getId(), marker.getType(), marker.getCoordinates());
+            FigureMapper mapper = session.getMapper(FigureMapper.class);
+            Dot dotOld = mapper.selectById();
+            for (float[] dot : figure.getCoordinates()) {
+                mapper.updateMarker(dot[0], dot[1], figure.getId());
+            }
             session.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Marker> getAllMarkers() {
-        List<Marker> markers = new ArrayList<>();
+    public List<Figure> getAllMarkers() {
+        List<Figure> markers = new ArrayList<>();
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
-            MapMapper mapper = session.getMapper(MapMapper.class);
+            FigureMapper mapper = session.getMapper(FigureMapper.class);
             markers = mapper.getAllMarkers();
             session.close();
         } catch (SQLException e) {

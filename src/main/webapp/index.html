@@ -22,6 +22,12 @@
           Modify &nbsp;
         </label>
       </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="interaction" value="none">
+          None &nbsp;
+        </label>
+      </div>
       <div class="form-group">
         <label>Draw type &nbsp;</label>
         <select name="draw-type" id="draw-type">
@@ -148,27 +154,33 @@
           this.Point.on('drawend', function(e){
             e.feature.type = 'Point';
             console.log(e.feature.getGeometry().getCoordinates());
-            let body = 'method=insert&type=' +
-               e.feature.type + '&coord='
-               + e.feature.getGeometry().getCoordinates();
+            let marker = {
+              type : e.feature.type,
+              coordinates: e.feature.getGeometry().getCoordinates()
+            };
+            let body = JSON.stringify(marker);
             e.feature.id = manageMarker(body);
           });
 
           this.LineString.on('drawend', function(e){
             e.feature.type = 'LineString';
             console.log(e.feature.getGeometry().getCoordinates());
-            let body = 'method=insert&type=' +
-               e.feature.type + '&coord='
-               + e.feature.getGeometry().getCoordinates();
+            let marker = {
+              type : e.feature.type,
+              coordinates: e.feature.getGeometry().getCoordinates()
+            }
+            let body = JSON.stringify(marker);
             e.feature.id = manageMarker(body);
           });
 
           this.Polygon.on('drawend', function(e){
             e.feature.type = 'Polygon';
             alert(e.feature.getGeometry().getCoordinates());
-            let body = 'method=insert&type=' +
-               e.feature.type + '&coord='
-               + e.feature.getGeometry().getCoordinates();
+            let marker = {
+              type : e.feature.type,
+              coordinates: e.feature.getGeometry().getCoordinates()
+            }
+            let body = JSON.stringify(marker);
             e.feature.id = manageMarker(body);
           });
         },
@@ -214,6 +226,9 @@
             Modify.setActive(true);
           } else if (value == 'draw') {
             Draw.setActive(true);
+            Modify.setActive(false);
+          } else if (value == 'none') {
+            Draw.setActive(false);
             Modify.setActive(false);
           }
         }

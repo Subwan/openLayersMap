@@ -12,7 +12,7 @@ function getAllMarkers() {
 
 function manageMarker(body) {
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/map', true);
+  xhr.open('POST', '/map', false);
   xhr.send(body);
   if (xhr.status != 200) {
     alert( xhr.status + ': ' + xhr.statusText );
