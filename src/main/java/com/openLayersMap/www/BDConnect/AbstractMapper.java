@@ -2,6 +2,7 @@ package com.openLayersMap.www.BDConnect;
 
 
 import com.openLayersMap.www.Model.Dot;
+import com.openLayersMap.www.Model.Point;
 import com.openLayersMap.www.Model.Figure;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.mapping.Environment;
@@ -43,7 +44,7 @@ public class AbstractMapper {
 
     }
 
-    public long insertPoint(Figure figure) {
+    public long insertFigure(Figure figure) {
         long id = 0;
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
@@ -51,7 +52,7 @@ public class AbstractMapper {
             FigureMapper mapper = session.getMapper(FigureMapper.class);
             mapper.insertMarker(figure.getType());
             id = mapper.getId();
-            for (float[] dot : figure.getCoordinates()) {
+            for (double[] dot : figure.getCoordinates()) {
                 mapper.insertCoordinates(dot[0], dot[1], id);
             }
             session.close();
@@ -66,8 +67,8 @@ public class AbstractMapper {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
             FigureMapper mapper = session.getMapper(FigureMapper.class);
-            Dot dotOld = mapper.selectById();
-            for (float[] dot : figure.getCoordinates()) {
+            List<Dot> dotOld = mapper.selectById(figure.getId());
+            for (double[] dot : figure.getCoordinates()) {
                 mapper.updateMarker(dot[0], dot[1], figure.getId());
             }
             session.close();
@@ -88,5 +89,24 @@ public class AbstractMapper {
             e.printStackTrace();
         }
         return markers;
+    }
+
+    public long insertPoint(Point point) {
+        long id = 0;
+        try {
+            SqlSessionFactory sqlSessionFactory = dataSource();
+            SqlSession session = sqlSessionFactory.openSession();
+            FigureMapper mapper = session.getMapper(FigureMapper.class);
+            mapper.insertMarker(point.getType());
+            id = mapper.getId();
+            mapper.insertCoordinates(point.getCoordinates()[0], point.getCoordinates()[1], id);
+            session.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public void updatePoint(Point dot) {
     }
 }

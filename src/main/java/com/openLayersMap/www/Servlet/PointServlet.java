@@ -1,9 +1,8 @@
 package com.openLayersMap.www.Servlet;
 
-
 import com.google.gson.Gson;
 import com.openLayersMap.www.BDConnect.AbstractMapper;
-import com.openLayersMap.www.Model.Figure;
+import com.openLayersMap.www.Model.Point;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/map/figure/*")
-public class FigureServlet extends HttpServlet {
+@WebServlet("/map/dot/*")
+public class PointServlet extends HttpServlet {
 
-    private AbstractMapper mapMapper = new AbstractMapper();
+    AbstractMapper dotMapper = new AbstractMapper();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -26,22 +25,22 @@ public class FigureServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Figure figure = new Gson().fromJson(request.getReader(), Figure.class);
+        Point dot = new Gson().fromJson(request.getReader(), Point.class);
         response.setContentType("text/html;charset=utf-8");
-        if (figure.getId() == 0) {
-            long id = insertFigure(figure);
+        if (dot.getId() == 0) {
+            long id = insertPoint(dot);
             response.getWriter().write((int) id);
         } else {
-            updateFigure(figure);
+            updatePoint(dot);
         }
     }
 
-    private long insertFigure(Figure figure) {
-        return mapMapper.insertFigure(figure);
+    private long insertPoint(Point point) {
+        return dotMapper.insertPoint(point);
     }
 
-    private void updateFigure(Figure figure) {
-        mapMapper.updateFigure(figure);
+    private void updatePoint(Point point) {
+        dotMapper.updatePoint(point);
     }
 
 //    private String gerAllMarkers() {
@@ -49,5 +48,3 @@ public class FigureServlet extends HttpServlet {
 //        return new Gson().toJson(markers);
 //    }
 }
-
-

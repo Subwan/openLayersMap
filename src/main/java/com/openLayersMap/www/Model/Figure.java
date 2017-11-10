@@ -7,27 +7,27 @@ import java.util.List;
 public class Figure {
     private long id;
     private String type;
-    private List<float[]> coordinates;
+    private List<double[]> coordinates;
 
-    public Figure(long id, String type, List<float[]> coordinates) {
+    public Figure(long id, String type, List<double[]> coordinates) {
         setId(id);
         setType(type);
         setCoordinates(coordinates);
     }
 
-    public Figure(String type, List<float[]>coordinates) {
+    public Figure(String type, List<double[]> coordinates) {
         setType(type);
         setCoordinates(coordinates);
     }
 
-    public Figure(String type, float[] coordinates) {
+    public Figure(String type, double[] coordinates) {
         setType(type);
-        List<float[]> coord = new ArrayList<>();
+        List<double[]> coord = new ArrayList<>();
         coord.add(coordinates);
         setCoordinates(coord);
     }
 
-    public Figure(Long id, String type, List<float[]>coordinates) {
+    public Figure(Long id, String type, List<double[]> coordinates) {
         setId(id);
         setType(type);
         setCoordinates(coordinates);
@@ -41,7 +41,7 @@ public class Figure {
 
     public String getType() { return type; };
 
-    public void setCoordinates(List<float[]>coordinates) { this.coordinates = coordinates; };
+    public void setCoordinates(List<double[]> coordinates) { this.coordinates = coordinates; };
 
-    public List<float[]> getCoordinates() { return coordinates; };
+    public List<double[]> getCoordinates() { return coordinates; };
 }

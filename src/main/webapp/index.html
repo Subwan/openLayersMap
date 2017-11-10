@@ -159,7 +159,7 @@
               coordinates: e.feature.getGeometry().getCoordinates()
             };
             let body = JSON.stringify(marker);
-            e.feature.id = manageMarker(body);
+            e.feature.id = manageDot(body);
           });
 
           this.LineString.on('drawend', function(e){
@@ -170,7 +170,7 @@
               coordinates: e.feature.getGeometry().getCoordinates()
             }
             let body = JSON.stringify(marker);
-            e.feature.id = manageMarker(body);
+            e.feature.id = manageFigure(body);
           });
 
           this.Polygon.on('drawend', function(e){
@@ -181,7 +181,7 @@
               coordinates: e.feature.getGeometry().getCoordinates()
             }
             let body = JSON.stringify(marker);
-            e.feature.id = manageMarker(body);
+            e.feature.id = manageFigure(body);
           });
         },
 
