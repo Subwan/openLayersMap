@@ -1,6 +1,6 @@
 function getAllMarkers() {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/map', false);
+  xhr.open('GET', '/map/line', false);
   xhr.send();
   if (xhr.status != 200) {
     alert( xhr.status + ': ' + xhr.statusText );
@@ -12,7 +12,7 @@ function getAllMarkers() {
 
 function deleteFigure(id) {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/map/dot?id=' + id, false);
+  xhr.open('GET', '/map/delete?id=' + id, false);
   xhr.send();
   if (xhr.status != 200) {
     alert( xhr.status + ': ' + xhr.statusText );

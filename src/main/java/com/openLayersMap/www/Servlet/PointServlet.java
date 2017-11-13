@@ -18,8 +18,7 @@ public class PointServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
-        long id = Long.parseLong(request.getParameter("id"));
-        deleteFigure(id);
+
     }
 
     @Override
@@ -42,9 +41,7 @@ public class PointServlet extends HttpServlet {
         mapMapper.updatePoint(point);
     }
 
-    private void deleteFigure(long id) {
-        mapMapper.deleteFigure(id);
-    }
+
 
 //    private String gerAllMarkers() {
 //        List<Marker> markers = mapMapper.getAllMarkers();
