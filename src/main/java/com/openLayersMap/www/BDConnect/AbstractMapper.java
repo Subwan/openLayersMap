@@ -129,4 +129,17 @@ public class AbstractMapper {
             e.printStackTrace();
         }
     }
+
+    public void deleteFigure(long id) {
+        try {
+            SqlSessionFactory sqlSessionFactory = dataSource();
+            SqlSession session = sqlSessionFactory.openSession();
+            FigureMapper mapper = session.getMapper(FigureMapper.class);
+            mapper.deleteFigureCoordinates(id);
+            mapper.deleteFigure(id);
+            session.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

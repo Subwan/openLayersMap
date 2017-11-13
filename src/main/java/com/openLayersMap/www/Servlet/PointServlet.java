@@ -13,14 +13,13 @@ import java.io.IOException;
 @WebServlet("/map/dot/*")
 public class PointServlet extends HttpServlet {
 
-    AbstractMapper dotMapper = new AbstractMapper();
+    AbstractMapper mapMapper = new AbstractMapper();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
-//        String json = gerAllMarkers();
-//        response.getWriter().write(json);
-
+        long id = Long.parseLong(request.getParameter("id"));
+        deleteFigure(id);
     }
 
     @Override
@@ -36,11 +35,15 @@ public class PointServlet extends HttpServlet {
     }
 
     private long insertPoint(Point point) {
-        return dotMapper.insertPoint(point);
+        return mapMapper.insertPoint(point);
     }
 
     private void updatePoint(Point point) {
-        dotMapper.updatePoint(point);
+        mapMapper.updatePoint(point);
+    }
+
+    private void deleteFigure(long id) {
+        mapMapper.deleteFigure(id);
     }
 
 //    private String gerAllMarkers() {

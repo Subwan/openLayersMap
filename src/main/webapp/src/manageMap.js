@@ -10,6 +10,17 @@ function getAllMarkers() {
   }
 };
 
+function deleteFigure(id) {
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', '/map/dot?id=' + id, false);
+  xhr.send();
+  if (xhr.status != 200) {
+    alert( xhr.status + ': ' + xhr.statusText );
+  } else {
+    xhr.responseText;
+  }
+}
+
 function manageLine(body) {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/map/line', false);
@@ -41,4 +52,8 @@ function manageDot(body) {
   } else {
     return xhr.responseText;
   }
+  // xhr.onreadystatechange = function() {
+  //   if (this.readyState != 4) return;
+  //   return this.responseText;
+  // }
 };

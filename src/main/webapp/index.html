@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<head>
     <title>OpenLayers map</title>
     <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css">
     <script src="https://openlayers.org/en/v4.4.2/build/ol.js"></script>
@@ -20,6 +19,12 @@
         <label>
           <input type="radio" name="interaction" value="modify">
           Modify &nbsp;
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="interaction" value="delete">
+          Delete &nbsp;
         </label>
       </div>
       <div class="radio">
@@ -122,15 +127,12 @@
           this.modify.on('modifyend',function(e){
             let features = e.features.getArray();
             console.log(features[0].getGeometry().getCoordinates());
-            console.log(features[0].id);
             let marker = {
               id: features[0].id,
               type : features[0].type,
               coordinates: features[0].getGeometry().getCoordinates()
             };
-            console.log(marker);
             let body = JSON.stringify(marker);
-            alert(body);
             if (marker.type == 'Point') {
               manageDot(body);
             } else if (marker.type == 'LineString') {
@@ -171,7 +173,6 @@
             };
             let body = JSON.stringify(marker);
             e.feature.id = manageDot(body);
-            alert (e.feature.id);
           });
 
           this.LineString.on('drawend', function(e){
@@ -193,7 +194,6 @@
               coordinates: e.feature.getGeometry().getCoordinates()
             }
             let body = JSON.stringify(marker);
-            console.log(body);
             e.feature.id = managePolygon(body);
           });
         },
@@ -228,6 +228,40 @@
       Draw.init();
 
 
+      var Delete = {
+        init: function() {
+          this.select = new ol.interaction.Select();
+          map.addInteraction(this.select);
+
+          this.modify = new ol.interaction.Modify({
+            features: this.select.getFeatures()
+          });
+          map.addInteraction(this.modify);
+
+          this.setEvents();
+        },
+        setEvents: function() {
+          var selectedFeatures = this.select.getFeatures();
+
+          this.select.on('change:active', function() {
+            selectedFeatures.forEach(selectedFeatures.remove, selectedFeatures);
+          });
+          this.modify.on('modifyend', function(e) {
+            let features = e.features.getArray();
+            id = features[0].id;
+            vector.getSource().removeFeature(features[0]);
+            selectedFeatures.forEach(selectedFeatures.remove, selectedFeatures);
+            deleteFigure(id);
+          });
+        },
+        setActive: function(active) {
+          this.select.setActive(active);
+          this.modify.setActive(active);
+        }
+      }
+      Delete.init();
+
+
       optionsForm.onchange = function(e) {
         var type = e.target.getAttribute('name');
         var value = e.target.value;
@@ -236,19 +270,27 @@
         } else if (type == 'interaction') {
           if (value == 'modify') {
             Draw.setActive(false);
+            Delete.setActive(false);
             Modify.setActive(true);
           } else if (value == 'draw') {
-            Draw.setActive(true);
             Modify.setActive(false);
+            Delete.setActive(false);
+            Draw.setActive(true);
+          } else if (value == 'delete') {
+            Draw.setActive(false);
+            Modify.setActive(false);
+            Delete.setActive(true);
           } else if (value == 'none') {
             Draw.setActive(false);
             Modify.setActive(false);
+            Delete.setActive(false);
           }
         }
       };
 
       Draw.setActive(true);
       Modify.setActive(false);
+      Delete.setActive(false);
 
 
       var snap = new ol.interaction.Snap({
@@ -286,4 +328,3 @@
 
     </script>
   </body>
-</html>

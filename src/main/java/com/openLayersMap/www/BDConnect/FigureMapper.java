@@ -42,4 +42,10 @@ public interface FigureMapper {
     })
     @Select("SELECT * FROM Figure; ")
     List<Line> getAllMarkers();
+
+    @Select("delete from map.Coordinates where fk_figure=#{id};")
+    void deleteFigureCoordinates(@Param("id") long id);
+
+    @Select("delete from map.Figure where id= #{id};")
+    void deleteFigure(@Param("id") long id);
 }
