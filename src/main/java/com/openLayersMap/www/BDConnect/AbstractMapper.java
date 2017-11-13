@@ -3,7 +3,7 @@ package com.openLayersMap.www.BDConnect;
 
 import com.openLayersMap.www.Model.Dot;
 import com.openLayersMap.www.Model.Point;
-import com.openLayersMap.www.Model.Figure;
+import com.openLayersMap.www.Model.Line;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -44,7 +44,7 @@ public class AbstractMapper {
 
     }
 
-    public long insertFigure(Figure figure) {
+    public long insertFigure(Line figure) {
         long id = 0;
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
@@ -62,7 +62,7 @@ public class AbstractMapper {
         return id;
     }
 
-    public void updateFigure(Figure figure) {
+    public void updateFigure(Line figure) {
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
@@ -70,9 +70,13 @@ public class AbstractMapper {
             List<Dot> dotOld = mapper.selectById(figure.getId());
             int size = dotOld.size();
             int i = 0;
+            long coordsID;
             for (double[] coord : figure.getCoordinates()) {
                 if (i < size) {
-                    mapper.updateCoordinates(coord[0], coord[1], figure.getId());
+                    if ((dotOld.get(i).getLat() != coord[0]) || (dotOld.get(i).getLon() != coord[1])) {
+                        coordsID = mapper.getFK(figure.getId(), i);
+                        mapper.updateCoordinates(coord[0], coord[1], coordsID);
+                    }
                 } else {
                     mapper.insertCoordinates(coord[0], coord[1], figure.getId());
                 }
@@ -84,8 +88,8 @@ public class AbstractMapper {
         }
     }
 
-    public List<Figure> getAllMarkers() {
-        List<Figure> markers = new ArrayList<>();
+    public List<Line> getAllMarkers() {
+        List<Line> markers = new ArrayList<>();
         try {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
@@ -115,5 +119,14 @@ public class AbstractMapper {
     }
 
     public void updatePoint(Point point) {
+        try {
+            SqlSessionFactory sqlSessionFactory = dataSource();
+            SqlSession session = sqlSessionFactory.openSession();
+            FigureMapper mapper = session.getMapper(FigureMapper.class);
+            mapper.updatePoint(point.getCoordinates()[0], point.getCoordinates()[1], point.getId());
+            session.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

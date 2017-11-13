@@ -29,7 +29,7 @@ public class PointServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         if (dot.getId() == 0) {
             long id = insertPoint(dot);
-            response.getWriter().write((int) id);
+            response.getWriter().write(String.valueOf(id));
         } else {
             updatePoint(dot);
         }

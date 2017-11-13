@@ -131,7 +131,11 @@
             console.log(marker);
             let body = JSON.stringify(marker);
             alert(body);
-            manageFigure(body);
+            if (marker.type == 'Point') {
+              manageDot(body);
+            } else {
+              manageFigure(body);
+            }
           });
         },
         setActive: function(active) {
@@ -177,17 +181,17 @@
             }
             let body = JSON.stringify(marker);
             e.feature.id = manageFigure(body);
-            alert(e.feature.id);
           });
 
           this.Polygon.on('drawend', function(e){
             e.feature.type = 'Polygon';
-            alert(e.feature.getGeometry().getCoordinates());
+            console.log(e.feature.getGeometry().getCoordinates());
             let marker = {
               type : e.feature.type,
               coordinates: e.feature.getGeometry().getCoordinates()
             }
             let body = JSON.stringify(marker);
+            alert(body);
             e.feature.id = manageFigure(body);
           });
         },

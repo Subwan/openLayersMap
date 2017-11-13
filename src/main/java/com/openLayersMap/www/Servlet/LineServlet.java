@@ -3,7 +3,7 @@ package com.openLayersMap.www.Servlet;
 
 import com.google.gson.Gson;
 import com.openLayersMap.www.BDConnect.AbstractMapper;
-import com.openLayersMap.www.Model.Figure;
+import com.openLayersMap.www.Model.Line;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/map/figure/*")
-public class FigureServlet extends HttpServlet {
+public class LineServlet extends HttpServlet {
 
     private AbstractMapper mapMapper = new AbstractMapper();
 
@@ -26,22 +26,22 @@ public class FigureServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Figure figure = new Gson().fromJson(request.getReader(), Figure.class);
+        Line line = new Gson().fromJson(request.getReader(), Line.class);
         response.setContentType("text/html;charset=utf-8");
-        if (figure.getId() == 0) {
-            long id = insertFigure(figure);
+        if (line.getId() == 0) {
+            long id = insertLine(line);
             response.getWriter().write(String.valueOf(id));
         } else {
-            updateFigure(figure);
+            updateLine(line);
         }
     }
 
-    private long insertFigure(Figure figure) {
-        return mapMapper.insertFigure(figure);
+    private long insertLine(Line line) {
+        return mapMapper.insertFigure(line);
     }
 
-    private void updateFigure(Figure figure) {
-        mapMapper.updateFigure(figure);
+    private void updateLine(Line line) {
+        mapMapper.updateFigure(line);
     }
 
 //    private String gerAllMarkers() {
