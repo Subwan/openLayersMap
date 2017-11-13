@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/map/figure/*")
+@WebServlet("/map/line/*")
 public class LineServlet extends HttpServlet {
 
     private AbstractMapper mapMapper = new AbstractMapper();

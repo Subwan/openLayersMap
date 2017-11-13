@@ -133,8 +133,10 @@
             alert(body);
             if (marker.type == 'Point') {
               manageDot(body);
+            } else if (marker.type == 'LineString') {
+              manageLine(body);
             } else {
-              manageFigure(body);
+              managePolygon(body);
             }
           });
         },
@@ -180,7 +182,7 @@
               coordinates: e.feature.getGeometry().getCoordinates()
             }
             let body = JSON.stringify(marker);
-            e.feature.id = manageFigure(body);
+            e.feature.id = manageLine(body);
           });
 
           this.Polygon.on('drawend', function(e){
@@ -191,8 +193,8 @@
               coordinates: e.feature.getGeometry().getCoordinates()
             }
             let body = JSON.stringify(marker);
-            alert(body);
-            e.feature.id = manageFigure(body);
+            console.log(body);
+            e.feature.id = managePolygon(body);
           });
         },
 

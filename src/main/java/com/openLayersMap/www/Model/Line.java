@@ -1,25 +1,26 @@
 package com.openLayersMap.www.Model;
 
 
+import java.util.List;
+
 public class Line {
     private long id;
     private String type;
-    private java.util.List<double[]> coordinates;
+    private List<double[]> coordinates;
 
-    public Line(long id, String type, java.util.List<double[]> coordinates) {
+    public Line(long id, String type, List<double[]> coordinates) {
         setId(id);
         setType(type);
         setCoordinates(coordinates);
     }
 
-    public Line(String type, java.util.List<double[]> coordinates) {
+    public Line(String type, List<double[]> coordinates) {
         setType(type);
         setCoordinates(coordinates);
     }
 
 
-
-    public Line(Long id, String type, java.util.List<double[]> coordinates) {
+    public Line(Long id, String type, List<double[]> coordinates) {
         setId(id);
         setType(type);
         setCoordinates(coordinates);
@@ -33,7 +34,7 @@ public class Line {
 
     public String getType() { return type; };
 
-    public void setCoordinates(java.util.List<double[]> coordinates) { this.coordinates = coordinates; };
+    public void setCoordinates(List<double[]> coordinates) { this.coordinates = coordinates; };
 
-    public java.util.List<double[]> getCoordinates() { return coordinates; };
+    public List<double[]> getCoordinates() { return coordinates; };
 }
