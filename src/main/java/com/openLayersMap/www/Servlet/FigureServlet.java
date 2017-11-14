@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/map/figure/*")
 public class FigureServlet extends HttpServlet {
@@ -18,10 +19,11 @@ public class FigureServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
-//        String json = gerAllMarkers();
-//        response.getWriter().write(json);
+        String json = gerAllMarkers();
+        response.getWriter().write(json);
 
     }
+
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -41,5 +43,11 @@ public class FigureServlet extends HttpServlet {
 
     private void updateFigure(Figure figure) {
         mapMapper.updateFigure(figure);
+    }
+
+    private String gerAllMarkers() {
+        List<Figure> figures = mapMapper.getAllFigures();
+        String json = new Gson().toJson(figures);
+        return json;
     }
 }

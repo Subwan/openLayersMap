@@ -294,12 +294,12 @@
 
       let loadButton = document.getElementById('load');
       loadButton.onclick = function() {
-        let allMarkers = getAllMarkers();
-        allMarkers.forEach(function(item, i, arr) {
-          alert(item);
-
-
-          // vector.addFeature(new ol.Feature(new ol.geom.Point([, ], )));
+        let allFigures = getAllFigures();
+        let format = new ol.format.WKT();
+        allFigures.forEach(function(item, i, arr) {
+          let feature = format.readFeature(item.coordinates);
+          feature.id = item.id;
+          vector.getSource().addFeature(feature);
         });
       }
 

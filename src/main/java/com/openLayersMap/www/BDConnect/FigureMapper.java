@@ -22,10 +22,10 @@ public interface FigureMapper {
 
     @ConstructorArgs({
             @Arg(column = "id", javaType = Long.class)
-            ,@Arg(column = "type", javaType = String.class)
+            ,@Arg(column = "coordinates", javaType = String.class)
     })
-    @Select("SELECT * FROM Figure; ")
-    List<Figure> getAllMarkers();
+    @Select("SELECT * FROM map.Figure; ")
+    List<Figure> getAllFigures();
 
 
     @Select("delete from map.Figure where id= #{id};")

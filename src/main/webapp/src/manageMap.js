@@ -1,6 +1,6 @@
-function getAllPoint() {
+function getAllFigures() {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/map/point', false);
+  xhr.open('GET', '/map/figure', false);
   xhr.send();
   if (xhr.status != 200) {
     alert( xhr.status + ': ' + xhr.statusText );

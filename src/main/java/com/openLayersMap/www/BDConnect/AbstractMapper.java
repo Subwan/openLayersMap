@@ -12,6 +12,8 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbstractMapper {
 
@@ -74,7 +76,6 @@ public class AbstractMapper {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
             FigureMapper mapper = session.getMapper(FigureMapper.class);
-
             mapper.deleteFigure(id);
             session.close();
         } catch (SQLException e) {
@@ -83,4 +84,17 @@ public class AbstractMapper {
     }
 
 
+    public List<Figure> getAllFigures() {
+        List<Figure> figures = new ArrayList<>();
+        try {
+            SqlSessionFactory sqlSessionFactory = dataSource();
+            SqlSession session = sqlSessionFactory.openSession();
+            FigureMapper mapper = session.getMapper(FigureMapper.class);
+            figures = mapper.getAllFigures();
+            session.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return figures;
+    }
 }
