@@ -1,6 +1,6 @@
-function getAllMarkers() {
+function getAllPoint() {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/map/line', false);
+  xhr.open('GET', '/map/point', false);
   xhr.send();
   if (xhr.status != 200) {
     alert( xhr.status + ': ' + xhr.statusText );
@@ -21,39 +21,13 @@ function deleteFigure(id) {
   }
 }
 
-function manageLine(body) {
+function manageFigure(body) {
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/map/line', false);
+  xhr.open('POST', '/map/figure', false);
   xhr.send(body);
   if (xhr.status != 200) {
     alert( xhr.status + ': ' + xhr.statusText );
   } else {
     return xhr.responseText;
   }
-};
-
-function managePolygon(body) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/map/polygon', false);
-  xhr.send(body);
-  if (xhr.status != 200) {
-    alert( xhr.status + ': ' + xhr.statusText );
-  } else {
-    return xhr.responseText;
-  }
-};
-
-function manageDot(body) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/map/dot', false);
-  xhr.send(body);
-  if (xhr.status != 200) {
-    alert( xhr.status + ': ' + xhr.statusText );
-  } else {
-    return xhr.responseText;
-  }
-  // xhr.onreadystatechange = function() {
-  //   if (this.readyState != 4) return;
-  //   return this.responseText;
-  // }
 };

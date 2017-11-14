@@ -53,9 +53,7 @@
       <button id="load">Load</button>
     </div>
     <script>
-      var idPoint = 0;
-      var idLineString = 0;
-      var idPolygon = 0;
+      var optionsForm = document.getElementById('options-form');
 
       var mapOSM = new ol.layer.Tile({
         source: new ol.source.OSM()
@@ -67,14 +65,9 @@
             })
       });
 
-      var feature = new ol.Feature({
-
-      });
 
       var vector = new ol.layer.Vector({
-        source: new ol.source.Vector({
-          features: [feature]
-        }),
+        source: new ol.source.Vector(),
         style: new ol.style.Style({
           fill: new ol.style.Fill({
             color: 'rgba(0, 255, 0, 0.2)'
@@ -93,7 +86,6 @@
         })
       });
 
-
       var map = new ol.Map({
         layers: [mapGoogle, mapOSM, vector],
         target: 'map',
@@ -104,6 +96,9 @@
       });
       mapOSM.setVisible(true);
       mapGoogle.setVisible(false);
+
+
+
 
       var Modify = {
         init: function() {
@@ -149,7 +144,6 @@
       };
       Modify.init();
 
-      var optionsForm = document.getElementById('options-form');
 
 
       var Draw = {
@@ -164,37 +158,16 @@
           this.setEvents();
         },
         setEvents: function() {
-          this.Point.on('drawend', function(e){
-            e.feature.type = 'Point';
-            console.log(e.feature.getGeometry().getCoordinates());
-            let marker = {
-              type : e.feature.type,
-              coordinates: e.feature.getGeometry().getCoordinates()
-            };
-            let body = JSON.stringify(marker);
-            e.feature.id = manageDot(body);
+          this.Point.on('drawend', function(e) {
+            e.feature.id = insertFigureInDB(e);
           });
 
           this.LineString.on('drawend', function(e){
-            e.feature.type = 'LineString';
-            console.log(e.feature.getGeometry().getCoordinates());
-            let marker = {
-              type : e.feature.type,
-              coordinates: e.feature.getGeometry().getCoordinates()
-            }
-            let body = JSON.stringify(marker);
-            e.feature.id = manageLine(body);
+            e.feature.id = insertFigureInDB(e);
           });
 
           this.Polygon.on('drawend', function(e){
-            e.feature.type = 'Polygon';
-            console.log(e.feature.getGeometry().getCoordinates());
-            let marker = {
-              type : e.feature.type,
-              coordinates: e.feature.getGeometry().getCoordinates()
-            }
-            let body = JSON.stringify(marker);
-            e.feature.id = managePolygon(body);
+             e.feature.id = insertFigureInDB(e);
           });
         },
 
@@ -226,6 +199,19 @@
         }
       };
       Draw.init();
+
+      function insertFigureInDB(e) {
+        console.log(e.feature.getGeometry().getCoordinates());
+        let coordWKT = new ol.format.WKT().writeFeature(e.feature);
+        console.log(coordWKT);
+        let marker = {
+          coordinates: coordWKT
+        }
+        let body = JSON.stringify(marker);
+        return manageFigure(body);
+      }
+
+
 
 
       var Delete = {

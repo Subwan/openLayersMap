@@ -2,7 +2,7 @@ package com.openLayersMap.www.Servlet;
 
 import com.google.gson.Gson;
 import com.openLayersMap.www.BDConnect.AbstractMapper;
-import com.openLayersMap.www.Model.Point;
+import com.openLayersMap.www.Model.Figure;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,41 +10,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/map/dot/*")
-public class PointServlet extends HttpServlet {
+@WebServlet("/map/figure/*")
+public class FigureServlet extends HttpServlet {
 
-    AbstractMapper mapMapper = new AbstractMapper();
+    private AbstractMapper mapMapper = new AbstractMapper();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
+//        String json = gerAllMarkers();
+//        response.getWriter().write(json);
 
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Point dot = new Gson().fromJson(request.getReader(), Point.class);
+        Figure figure = new Gson().fromJson(request.getReader(), Figure.class);
         response.setContentType("text/html;charset=utf-8");
-        if (dot.getId() == 0) {
-            long id = insertPoint(dot);
+        if (figure.getId() == 0) {
+            long id = insertFigure(figure);
             response.getWriter().write(String.valueOf(id));
         } else {
-            updatePoint(dot);
+            updateFigure(figure);
         }
     }
 
-    private long insertPoint(Point point) {
-        return mapMapper.insertPoint(point);
+    private long insertFigure(Figure figure) {
+        return mapMapper.insertFigure(figure);
     }
 
-    private void updatePoint(Point point) {
-        mapMapper.updatePoint(point);
+    private void updateFigure(Figure figure) {
+        mapMapper.updateFigure(figure);
     }
-
-
-
-//    private String gerAllMarkers() {
-//        List<Marker> markers = mapMapper.getAllMarkers();
-//        return new Gson().toJson(markers);
-//    }
 }
