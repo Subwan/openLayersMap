@@ -1,33 +1,32 @@
-function getAllFigures() {
+function getAllFigures(callback) {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/map/figure', false);
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      callback( JSON.parse(xhr.responseText));
+    }
+  };
+  xhr.open('GET', '/map/figure', true);
   xhr.send();
-  if (xhr.status != 200) {
-    alert( xhr.status + ': ' + xhr.statusText );
-  } else {
-    let json = xhr.responseText;
-    return JSON.parse(json);
-  }
 };
 
 function deleteFigure(id) {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/map/delete?id=' + id, false);
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      xhr.responseText;
+    }
+  };
+  xhr.open('GET', '/map/delete?id=' + id, true);
   xhr.send();
-  if (xhr.status != 200) {
-    alert( xhr.status + ': ' + xhr.statusText );
-  } else {
-    xhr.responseText;
-  }
 }
 
-function manageFigure(body) {
+function manageFigure(body, callback) {
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/map/figure', false);
+  xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            callback(xhr.responseText);
+       }
+    };
+  xhr.open('POST', '/map/figure', true);
   xhr.send(body);
-  if (xhr.status != 200) {
-    alert( xhr.status + ': ' + xhr.statusText );
-  } else {
-    return xhr.responseText;
-  }
 };

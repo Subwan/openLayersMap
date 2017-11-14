@@ -127,7 +127,9 @@
               coordinates: coordWKT
             };
             let body = JSON.stringify(marker);
-            manageFigure(body);
+            console.log(body);
+            manageFigure(body, function() {
+            });
 
           });
         },
@@ -153,15 +155,15 @@
         },
         setEvents: function() {
           this.Point.on('drawend', function(e) {
-            e.feature.id = insertFigureInDB(e);
+            insertFigureInDB(e);
           });
 
           this.LineString.on('drawend', function(e){
-            e.feature.id = insertFigureInDB(e);
+            insertFigureInDB(e);
           });
 
           this.Polygon.on('drawend', function(e){
-             e.feature.id = insertFigureInDB(e);
+             insertFigureInDB(e);
           });
         },
 
@@ -200,7 +202,9 @@
           coordinates: coordWKT
         }
         let body = JSON.stringify(marker);
-        return manageFigure(body);
+        manageFigure(body, function(result) {
+          e.feature.id = result;
+        });
       }
 
 
@@ -291,17 +295,15 @@
 
       let loadButton = document.getElementById('load');
       loadButton.onclick = function() {
-        let allFigures = getAllFigures();
-        let format = new ol.format.WKT();
-        allFigures.forEach(function(item, i, arr) {
-          let feature = format.readFeature(item.coordinates);
-          feature.id = item.id;
-          vector.getSource().addFeature(feature);
+        getAllFigures(function(result) {
+          let format = new ol.format.WKT();
+          result.forEach(function(item, i, arr) {
+            let feature = format.readFeature(item.coordinates);
+            feature.id = item.id;
+            vector.getSource().addFeature(feature);
+          });
         });
       }
-
-
-
 
 
     </script>
