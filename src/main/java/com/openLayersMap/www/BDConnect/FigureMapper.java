@@ -16,11 +16,9 @@ public interface FigureMapper {
     Long getId();
 
 
-    @Select("UPDATE map.Coordinates set lat=#{lat}, lon=#{lon} where id =#{id}; ")
-    void updateCoordinates(@Param("lat") double x, @Param("lon") double y, @Param("id") long id);
+    @Select("UPDATE map.Figure set coordinates=#{coordinates} where id =#{id}; ")
+    void updateCoordinates(@Param("coordinates") String coordinates, @Param("id") long id);
 
-    @Select("UPDATE map.Coordinates set lat=#{lat}, lon=#{lon} where fk_figure=#{id}; ")
-    void updatePoint(@Param("lat") double x, @Param("lon") double y, @Param("id") long id);
 
     @ConstructorArgs({
             @Arg(column = "id", javaType = Long.class)

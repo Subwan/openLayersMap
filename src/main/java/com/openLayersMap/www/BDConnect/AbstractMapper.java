@@ -60,7 +60,7 @@ public class AbstractMapper {
             SqlSessionFactory sqlSessionFactory = dataSource();
             SqlSession session = sqlSessionFactory.openSession();
             FigureMapper mapper = session.getMapper(FigureMapper.class);
-
+            mapper.updateCoordinates(figure.getCoordinates(), figure.getId());
             session.close();
         } catch (SQLException e) {
             e.printStackTrace();
