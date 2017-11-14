@@ -11,20 +11,35 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+
+/**
+ * Servlet for working with figures.
+ */
 @WebServlet("/map/figure/*")
 public class FigureServlet extends HttpServlet {
 
     private AbstractMapper mapMapper = new AbstractMapper();
 
+    /**
+     * doGet method is uses for load all figures at map.
+     * @param request nothing.
+     * @param response array of the figures, converted to JSON.
+     * @throws IOException
+     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
         String json = gerAllMarkers();
         response.getWriter().write(json);
-
     }
 
-
+    /**
+     * doPost method is uses for insert and update figures. If ID of the figure = 0, call insert method and response
+     * ID from data base, which is uses to set ID to figure at map.
+     * @param request object figure as JSON.
+     * @param response ID, if figure was insert in data base.
+     * @throws IOException
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Figure figure = new Gson().fromJson(request.getReader(), Figure.class);

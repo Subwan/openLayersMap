@@ -55,17 +55,20 @@
     <script>
       var optionsForm = document.getElementById('options-form');
 
+      /* Create OSM layer. */
       var mapOSM = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
 
+      /* Create Google Map layer.  */
       var mapGoogle = new ol.layer.Tile({
             source: new ol.source.TileImage({
               url: 'http://khm{0-3}.googleapis.com/kh?v=742&hl=pl&&x={x}&y={y}&z={z}'
             })
       });
 
-
+      /* Create layer Vector for a map with source,
+      which needs for drawing a figures at map. */
       var vector = new ol.layer.Vector({
         source: new ol.source.Vector(),
         style: new ol.style.Style({
@@ -86,6 +89,7 @@
         })
       });
 
+      /* Create map with 3 layers. */
       var map = new ol.Map({
         layers: [mapGoogle, mapOSM, vector],
         target: 'map',
@@ -99,7 +103,8 @@
 
 
 
-
+      /* This object modyfi figures at map and send modyfi
+      request to the server. */
       var Modify = {
         init: function() {
           this.select = new ol.interaction.Select();
@@ -115,10 +120,13 @@
         setEvents: function() {
           var selectedFeatures = this.select.getFeatures();
 
+          /* This method switch select when active is changed. */
           this.select.on('change:active', function() {
             selectedFeatures.forEach(selectedFeatures.remove, selectedFeatures);
           });
 
+          /* When modyfi at map is done, this method get modifiable figure,
+          made JSON object of it and send it to the server. */
           this.modify.on('modifyend',function(e){
             let features = e.features.getArray();
             let coordWKT = new ol.format.WKT().writeFeature(features[0]);
@@ -127,7 +135,6 @@
               coordinates: coordWKT
             };
             let body = JSON.stringify(marker);
-            console.log(body);
             manageFigure(body, function() {
             });
 
@@ -141,7 +148,8 @@
       Modify.init();
 
 
-
+      /* This object draw figures at map and send inset request
+      to the server. */
       var Draw = {
         init: function() {
           map.addInteraction(this.Point);
@@ -196,6 +204,9 @@
       };
       Draw.init();
 
+      /* This method used for convert figure coordinat to WKT format, make
+      JSON object of it, send it to the server, and get ID of the figure
+      from data base as a reqest result. */
       function insertFigureInDB(e) {
         let coordWKT = new ol.format.WKT().writeFeature(e.feature);
         let marker = {
@@ -209,7 +220,8 @@
 
 
 
-
+      /* This object delete figures from map as a modyfi end and send delete request
+      to the server.  */
       var Delete = {
         init: function() {
           this.select = new ol.interaction.Select();
@@ -228,6 +240,8 @@
           this.select.on('change:active', function() {
             selectedFeatures.forEach(selectedFeatures.remove, selectedFeatures);
           });
+          /* This method remove figure from map as a modyfi end,
+          get ID of this figur and send it to the server. */
           this.modify.on('modifyend', function(e) {
             let features = e.features.getArray();
             id = features[0].id;
@@ -243,7 +257,8 @@
       }
       Delete.init();
 
-
+      /* When options form is change, this method change active of the
+      possible events. */
       optionsForm.onchange = function(e) {
         var type = e.target.getAttribute('name');
         var value = e.target.value;
